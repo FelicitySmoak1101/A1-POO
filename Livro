@@ -1,0 +1,84 @@
+package DadosLivros;
+import java.time.LocalDateTime;
+
+
+public class Livro implements Comparable<Livro>{
+
+	private String titulo, autor;
+	private LocalDateTime dataEmprestimo;
+	private String status;
+	private static int numero=1;
+	private static int ano;
+	private int codigoDoLivro;
+	Vizinhos vizinhoComLivro;
+	
+	public Livro(String titulo, String autor, String status, int ano) {
+		super();
+		this.titulo = titulo;
+		this.autor = autor;
+		this.status = status;
+		this.ano = ano;
+		dataEmprestimo = null;
+		this.codigoDoLivro = numero;
+		numero++;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public String getAutor() {
+		return autor;
+	}
+
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
+	}
+
+	public int getCodigoDoLivro() {
+		return codigoDoLivro;
+	}
+
+	public LocalDateTime getDataEmprestimo() {
+		return dataEmprestimo;
+	}
+
+	public void setDataEmprestimo(LocalDateTime dataEmprestimo) {
+		this.dataEmprestimo = dataEmprestimo;
+	}
+	
+	public int getVizinhoComLivro() {
+		return vizinhoComLivro.getCodigoVizinho();
+	}
+
+	public void setVizinhoComLivro(Vizinhos vizinhoComLivro) {
+		this.vizinhoComLivro = vizinhoComLivro;
+	}
+	
+
+	public int compareTo(Livro l) {
+		return this.titulo.compareToIgnoreCase(l.getTitulo());
+	}
+	
+
+}
