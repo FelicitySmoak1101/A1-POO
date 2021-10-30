@@ -1,0 +1,45 @@
+package Registros;
+
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import DadosLivros.*;
+
+public class Cadastros {
+	
+	private ArrayList<Livro> registroLivros;
+
+	public Cadastros() {
+		registroLivros = new ArrayList<Livro>();
+	}
+	
+	public void adicionaLivro (Livro livro) {
+		registroLivros.add(livro);
+	}
+
+	public Livro getLivro (int indice) {
+		return registroLivros.get(indice);
+	}
+	
+	public void removeLivro(Livro livro) {
+		registroLivros.remove(livro);
+	}
+	
+	public void removeLivro (int indice) {
+		registroLivros.remove(indice);
+	}
+	
+	public int size() {
+		return registroLivros.size();
+	}
+	
+	public void emprestaLivro (Livro livro, Vizinhos vizinho){
+		LocalDateTime now = LocalDateTime.now();
+		livro.setDataEmprestimo(now);
+		livro.setVizinhoComLivro(vizinho);
+	}
+	
+
+}
