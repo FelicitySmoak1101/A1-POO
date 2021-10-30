@@ -1,0 +1,34 @@
+package Registros;
+
+import java.util.ArrayList;
+import DadosLivros.Vizinhos;
+
+public class CadastroVizinhos {
+	
+	private ArrayList<Vizinhos> registroVizinho;
+
+	public CadastroVizinhos() {
+		registroVizinho = new ArrayList<Vizinhos>();
+	}
+	
+	public void adicionarVizinho (Vizinhos vizinho) {
+		registroVizinho.add(vizinho);
+	}
+
+	public Vizinhos getVizinho (int indice) {
+		return registroVizinho.get(indice);
+	}
+	
+	public void removeVizinho (Vizinhos vizinho) {
+		registroVizinho.remove(vizinho);
+	}
+	
+	public void removeContato (int indice) {
+		registroVizinho.remove(indice);
+	}
+	
+	public int size() {
+		return registroVizinho.size();
+	}
+
+}
