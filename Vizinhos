@@ -1,0 +1,36 @@
+package DadosLivros;
+
+public class Vizinhos {
+	private String nome, telefone;
+	private static int codigoV=1;
+	private int codigoVizinho;
+	
+	public Vizinhos(String nome, String telefone) {
+		super();
+		this.nome = nome;
+		this.telefone = telefone;
+		this.codigoVizinho = codigoV;
+		codigoV++;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public int getCodigoVizinho() {
+		return codigoVizinho;
+	}	
+
+}
