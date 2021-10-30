@@ -1,0 +1,212 @@
+package Main;
+
+import java.util.Scanner;
+
+import Registros.*;
+import DadosLivros.*;
+
+public class Main {
+	
+	private static Scanner tc = new Scanner(System.in);
+	private static Cadastros registroDeLivros;
+	private static CadastroVizinhos registroDeVizinhos;
+	
+	private static void adicionaVizinho() {
+		String nome, telefone;
+		Vizinhos vizinho;
+		System.out.println("Adicionar vizinho:\n");
+		System.out.print("Nome: ");
+		nome = tc.nextLine();
+		System.out.print("Telefone: ");
+		telefone = tc.nextLine();
+					
+		vizinho = new Vizinhos(nome, telefone);
+		registroDeVizinhos.adicionarVizinho(vizinho);
+		
+		System.out.printf ("Vizinho cadastrado com sucesso!!");
+	}
+	
+	private static void adicionaLivro() {
+		String titulo, autor, status;
+		int ano;
+		Livro livro;
+		System.out.println("Adicionar Livro:\n");
+		System.out.print("Titulo: ");
+		titulo = tc.nextLine();
+		System.out.print("Autor: ");
+		autor = tc.nextLine();
+		System.out.print("Ano: ");
+		ano = tc.nextInt();
+		
+		status="Disponivel";
+					
+		livro = new Livro(titulo, autor, status, ano);
+		registroDeLivros.adicionaLivro(livro);
+		System.out.printf ("Livro cadastrado com sucesso!!");
+	}
+	
+	private static void listarLivrosLivres() {
+		System.out.println("=== Lista de livros disponiveis ===");
+		System.out.println("Nr Registro\t Titulo\t Autor\t Ano" );
+		for (int i = 0; i < registroDeLivros.size(); i++) {
+			Livro l = registroDeLivros.getLivro(i);
+			if(l.getDataEmprestimo()==null){
+			System.out.printf ("%s\t %s\t  %s\t %s\t\n",
+					l.getCodigoDoLivro(), l.getTitulo(), l.getAutor(), l.getAno());
+			}
+		}
+	}
+	
+	private static void listarTodosVizinhos() {
+		System.out.println("=== Lista de Vizinhos ===");
+		System.out.println("Cod\t Nome\t\t\t Telefone" );
+		for (int i = 0; i < registroDeVizinhos.size(); i++) {
+			Vizinhos v = registroDeVizinhos.getVizinho(i);
+			System.out.printf ("%s\t %s\t\t  %s\n",
+					v.getCodigoVizinho(), v.getNome(), v.getTelefone());
+			}
+	}
+	
+	private static void listarTodosLivros() {
+		System.out.println("=== Lista de livros ===");
+		System.out.println("Cod\t Titulo\t\t\t Autor\t\t Ano\t\t Status\t\t Emprestado para" );
+		for (int i = 0; i < registroDeLivros.size(); i++) {
+			Livro l = registroDeLivros.getLivro(i);
+			if(l.getDataEmprestimo()==null){
+			System.out.printf ("%s\t %s\t\t  %s\t\t\t %s\t\t Livro Disponivel\n",
+					l.getCodigoDoLivro(), l.getTitulo(), l.getAutor(), l.getAno());
+			}
+			else{
+			System.out.printf ("%s\t %s\t\t  %s\t\t\t %s\\t\\t  %s\t\t %s\n",
+						l.getCodigoDoLivro(), l.getTitulo(), l.getAutor(), l.getAno(),l.getStatus(),l.getVizinhoComLivro());
+			}
+		}
+	}
+	
+	private static void emprestarLivro() {
+		boolean flag=false;
+		boolean flagVizinho=false;
+		int codLivro;
+		int codVizinho;
+		System.out.print("Digite o codigo do livro:");
+		codLivro = tc.nextInt();
+		tc.nextLine();
+		Main.listarTodosVizinhos();
+		System.out.println();
+		System.out.print("Digite o codigo do vizinho:");
+		codVizinho = tc.nextInt();
+		tc.nextLine();
+		for (int i = 0; i < registroDeVizinhos.size(); i++) {
+			Vizinhos vizinho = registroDeVizinhos.getVizinho(i);
+			if(vizinho.getCodigoVizinho()==codVizinho){
+			flagVizinho=true;
+			for (int i1 = 0; i1 < registroDeLivros.size(); i1++) {
+				Livro livro = registroDeLivros.getLivro(i1);
+				if(livro.getCodigoDoLivro()==codLivro && livro.getDataEmprestimo()==null){
+				registroDeLivros.emprestaLivro(livro,vizinho);
+				System.out.println("livro codigo: "+livro.getCodigoDoLivro()+ "titulo: "+livro.getTitulo()+" emprestado para: " + vizinho.getNome() + ".");
+				System.out.println("Data de emprestimo: "+livro.getDataEmprestimo());
+				livro.setStatus("Emprestado");
+				flag=true;
+				}
+			}
+			if(flag==false){
+				System.out.println("Livro não encontrado ou já emprestado.");
+			}
+			}
+		}
+		if(flagVizinho==false){
+			System.out.println("Vizinho não encontrado.");
+		}
+		
+		
+	}
+	
+	private static void devolverLivro() {
+		boolean flag=false;
+		int codLivro;
+		int codVizinho;
+		System.out.print("Digite o codigo do vizinho:");
+		codVizinho = tc.nextInt();
+		System.out.print("Digite o codigo do livro:");
+		codLivro = tc.nextInt();
+		tc.nextLine();
+		for (int i = 0; i < registroDeLivros.size(); i++) {
+			Livro livro = registroDeLivros.getLivro(i);
+			if(livro.getCodigoDoLivro()==codLivro && livro.getDataEmprestimo()!= null && livro.getVizinhoComLivro()==codVizinho){
+			livro.setDataEmprestimo(null);
+			livro.setStatus("Disponivel");
+			flag=true;
+			System.out.println("Livro: "+livro.getTitulo()+" devolvido com sucesso.");
+			}
+		}
+		if(flag==false){
+			System.out.println("Este vizinho não está com este livro.");
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+
+		registroDeLivros = new Cadastros();
+		registroDeVizinhos = new CadastroVizinhos();
+		
+		Livro livro1 = new Livro ("Eu Fico Loko", "Christian Figueiredo", "Disponivel", 2015);
+		Livro livro2 = new Livro ("Crepusculo", "Stephanie Meyer", "Disponivel", 2005);
+		Livro livro3 = new Livro ("Jogos Vorazes", "Suzanne Collins","Disponivel", 2008);
+		Livro livro4 = new Livro ("Harry Potter", "JK Rowling","Disponivel", 1998);
+		Livro livro5 = new Livro ("Para todos os garotos que ja amei", "Jenny Han","Disponivel", 2014);
+		registroDeLivros.adicionaLivro(livro1);
+		registroDeLivros.adicionaLivro(livro2);
+		registroDeLivros.adicionaLivro(livro3);
+		registroDeLivros.adicionaLivro(livro4);
+		registroDeLivros.adicionaLivro(livro5);
+		Vizinhos vizinho1 = new Vizinhos ("Giovana Goulart", "55923456781");
+		Vizinhos vizinho2 = new Vizinhos ("Kelen Goulart", "55987654321");
+		Vizinhos vizinho3 = new Vizinhos ("Maria Luiza Costa", "55967812345");
+		Vizinhos vizinho4 = new Vizinhos ("Lilian Goulart", "55956723481");
+		registroDeVizinhos.adicionarVizinho(vizinho1);
+		registroDeVizinhos.adicionarVizinho(vizinho2);
+		registroDeVizinhos.adicionarVizinho(vizinho3);
+		registroDeVizinhos.adicionarVizinho(vizinho4);
+		
+		
+		
+		int op;
+		do {
+			System.out.println("\n==> Menu:\n");
+			System.out.println("   0 - sair");
+			System.out.println("   1 - adiciona livro");
+			System.out.println("   2 - adiciona vizinho");
+			System.out.println("   3 - emprestar livro");
+			System.out.println("   4 - devolver livro");
+			System.out.print("\n   Opcao: ");
+			op = tc.nextInt();
+			tc.nextLine();
+
+			switch (op) {
+			case 0: 
+				System.out.println("Saindo..."); // System.exit(0);
+				break;
+			case 1:
+				adicionaLivro();
+				break;
+			case 2:
+				adicionaVizinho();
+				break;
+			case 3:
+				listarLivrosLivres();
+				emprestarLivro();
+				break;
+			case 4:
+				devolverLivro();
+				break;
+			default:
+				System.out.println("Opcao invalida!\n\n");
+				break;
+			}
+		} while (op != 0);
+
+	}
+
+}
